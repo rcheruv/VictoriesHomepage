@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victories - Game Hub</title>
+    <style>
+        /* Base Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            background-size: 400% 400%;
+            animation: rainbowBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+
+        @keyframes rainbowBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Header / Logo Area */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .logo-main {
+            font-size: 80px;
+            font-weight: 900;
+            color: #FFEB3B;
+            /* Yellow */
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            text-shadow:
+                -4px -4px 0 #7B1FA2,
+                4px -4px 0 #7B1FA2,
+                -4px 4px 0 #7B1FA2,
+                4px 4px 0 #7B1FA2,
+                0px 8px 15px rgba(0, 0, 0, 0.4);
+            margin: 0;
+            font-style: italic;
+        }
+
+        .logo-sub {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-top: -10px;
+        }
+
+        .container-label {
+            font-size: 24px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+
+        /* Game Grid */
+        .game-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        /* Game Card Box */
+        .game-card {
+            background: rgba(235, 235, 235, 0.9);
+            border-radius: 20px;
+            padding: 15px;
+            width: 200px;
+            color: #333;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background: #ffffff;
+        }
+
+        .card-header {
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-header i {
+            margin-right: 5px;
+        }
+
+        .thumbnail-box {
+            background: #ccc;
+            width: 100%;
+            height: 120px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .thumbnail-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .game-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .logo-main {
+                font-size: 50px;
+            }
+
+            .logo-sub {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1 class="logo-main">VICTORIES</h1>
+        <div class="logo-sub">VICTOR OH YEAH!</div>
+    </header>
+
+    <div class="container-label">game-container</div>
+
+    <main class="game-grid">
+
+        <a href="YOUR_GAME_LINK_HERE" class="game-card">
+            <div class="card-header">Random thumbnail</div>
+            <div class="thumbnail-box">
+                <img src="https://via.placeholder.com/200x120?text=Game+Image" alt="Game 1">
+            </div>
+            <div class="game-title">Random Game 1</div>
+        </a>
+
+        <a href="#" class="game-card">
+            <div class="card-header">Random thumbnail</div>
+            <div class="thumbnail-box">
+                <img src="https://via.placeholder.com/200x120?text=Game+Image" alt="Game 2">
+            </div>
+            <div class="game-title">Random Game 2</div>
+        </a>
+
+        <a href="#" class="game-card">
+            <div class="card-header">Random thumbnail</div>
+            <div class="thumbnail-box">
+                <img src="https://via.placeholder.com/200x120?text=Game+Image" alt="Game 3">
+            </div>
+            <div class="game-title">Random Game 3</div>
+        </a>
+
+        <a href="#" class="game-card">
+            <div class="card-header">Random thumbnail</div>
+            <div class="thumbnail-box">
+                <img src="https://via.placeholder.com/200x120?text=Game+Image" alt="Game 4">
+            </div>
+            <div class="game-title">Random Game 4</div>
+        </a>
+
+        <a href="#" class="game-card">
+            <div class="card-header">Random thumbnail</div>
+            <div class="thumbnail-box">
+                <img src="https://via.placeholder.com/200x120?text=Game+Image" alt="Game 5">
+            </div>
+            <div class="game-title">Random Game 5</div>
+        </a>
+
+    </main>
+
+</body>
+
+</html>
