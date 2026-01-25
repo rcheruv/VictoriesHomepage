@@ -241,6 +241,13 @@
             margin: 0;
         }
 
+        #locked-message {
+            text-align: center;
+            font-size: 13px;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
         @media (max-width: 600px) {
             .logo-main {
                 font-size: 50px;
@@ -263,7 +270,7 @@
     <div class="container-label">Victories game container</div>
 
     <main class="game-grid">
-        <!-- Restricted games (hidden unless logged in) -->
+        <!-- Restricted games (blocked unless logged in) -->
         <a href="https://shooter1.lovable.app" class="game-card restricted" id="game-shooter1">
             <div class="card-header">Shooter1</div>
             <div class="thumbnail-box">
@@ -388,6 +395,10 @@
         <div id="auth-status"></div>
         <div style="text-align:center;">
             <button id="logout-btn" type="button">Log Out</button>
+        </div>
+
+        <div id="locked-message">
+            Restricted games: NexusAI, Shooter1, FoodFPS, VictoriesLogin, and Unbanner need an account first.
         </div>
     </section>
 
