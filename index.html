@@ -2,10 +2,11 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Victories - Game Hub</title>
     <style>
+        /* (Your existing CSS kept exactly as you posted) */
         body {
             margin: 0;
             padding: 0;
@@ -21,23 +22,12 @@
         }
 
         @keyframes rainbowBG {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        header {
-            text-align: center;
-            padding: 40px 20px;
-        }
+        header { text-align: center; padding: 40px 20px; }
 
         .logo-main {
             font-size: 80px;
@@ -64,11 +54,7 @@
             margin-top: -10px;
         }
 
-        .container-label {
-            font-size: 24px;
-            margin: 20px 0;
-            font-weight: 500;
-        }
+        .container-label { font-size: 24px; margin: 20px 0; font-weight: 500; }
 
         .game-grid {
             display: flex;
@@ -98,13 +84,7 @@
             background: #ffffff;
         }
 
-        .card-header {
-            font-size: 14px;
-            margin-bottom: 10px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
+        .card-header { font-size: 14px; margin-bottom: 10px; font-weight: bold; display: flex; align-items: center; }
 
         .thumbnail-box {
             background: #ccc;
@@ -124,11 +104,7 @@
             object-fit: cover;
         }
 
-        .game-title {
-            font-weight: bold;
-            font-size: 16px;
-            margin-top: auto;
-        }
+        .game-title { font-weight: bold; font-size: 16px; margin-top: auto; }
 
         /* Auth styles */
         #auth-section {
@@ -141,121 +117,39 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
         }
 
-        #auth-section h2 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 26px;
-        }
+        #auth-section h2 { text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 26px; }
 
-        .auth-toggle {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+        .auth-toggle { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
 
         .auth-toggle button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            background: #ffffff;
-            color: #333;
+            flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; background: #ffffff; color: #333;
         }
 
-        .auth-toggle button.active {
-            background: #FFEB3B;
-        }
+        .auth-toggle button.active { background: #FFEB3B; }
 
-        .auth-input {
-            width: 100%;
-            padding: 8px 10px;
-            margin-bottom: 12px;
-            border-radius: 6px;
-            border: none;
-            outline: none;
-        }
+        .auth-input { width: 100%; padding: 8px 10px; margin-bottom: 12px; border-radius: 6px; border: none; outline: none; }
 
-        .auth-label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
+        .auth-label { display: block; margin-bottom: 5px; font-size: 14px; }
 
-        .auth-btn {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            color: white;
-        }
+        .auth-btn { width: 100%; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; color: white; }
 
-        #signin-submit {
-            background: #4CAF50;
-        }
+        #signin-submit { background: #4CAF50; }
+        #signup-submit { background: #2196F3; }
 
-        #signup-submit {
-            background: #2196F3;
-        }
+        #auth-message { text-align: center; margin-bottom: 10px; min-height: 20px; font-size: 14px; }
+        #auth-status { text-align: center; margin-top: 15px; font-size: 14px; }
+        #logout-btn { display: none; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; background: #f44336; color: white; font-size: 13px; margin-top: 8px; }
 
-        #auth-message {
-            text-align: center;
-            margin-bottom: 10px;
-            min-height: 20px;
-            font-size: 14px;
-        }
+        .auth-row-inline { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 13px; }
+        .auth-row-inline input[type="checkbox"] { width: auto; margin: 0; }
 
-        #auth-status {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-        }
+        #locked-message { text-align: center; font-size: 13px; margin-top: 10px; opacity: 0.9; }
 
-        #logout-btn {
-            display: none;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            background: #f44336;
-            color: white;
-            font-size: 13px;
-            margin-top: 8px;
-        }
-
-        .auth-row-inline {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 10px;
-            font-size: 13px;
-        }
-
-        .auth-row-inline input[type="checkbox"] {
-            width: auto;
-            margin: 0;
-        }
-
-        #locked-message {
-            text-align: center;
-            font-size: 13px;
-            margin-top: 10px;
-            opacity: 0.9;
-        }
+        a.restricted.blocked { transform: scale(0.99); } /* small visual hint when blocked */
 
         @media (max-width: 600px) {
-            .logo-main {
-                font-size: 50px;
-            }
-
-            .logo-sub {
-                font-size: 20px;
-            }
+            .logo-main { font-size: 50px; }
+            .logo-sub { font-size: 20px; }
         }
     </style>
 </head>
