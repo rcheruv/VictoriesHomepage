@@ -1,5 +1,5 @@
 // content.js
-// Simple localStorage-based auth (NOT secure, demo only)
+// Demo-only auth with localStorage: NOT secure for real passwords.
 
 document.addEventListener('DOMContentLoaded', function () {
     const showSigninBtn = document.getElementById('show-signin');
@@ -9,6 +9,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const authMessage = document.getElementById('auth-message');
     const authStatus = document.getElementById('auth-status');
     const logoutBtn = document.getElementById('logout-btn');
+
+    const signinUsername = document.getElementById('signin-username');
+    const signinPassword = document.getElementById('signin-password');
+    const signinShowPass = document.getElementById('signin-show-pass');
+    const signinRemember = document.getElementById('signin-remember');
+
+    const signupUsername = document.getElementById('signup-username');
+    const signupPassword = document.getElementById('signup-password');
+    const signupConfirm = document.getElementById('signup-confirm');
+    const signupShowPass = document.getElementById('signup-show-pass');
+    const signupRemember = document.getElementById('signup-remember');
+
+    const restrictedCards = document.querySelectorAll('.restricted');
 
     function setMessage(text, type) {
         authMessage.textContent = text;
@@ -24,9 +37,26 @@ document.addEventListener('DOMContentLoaded', function () {
         if (currentUser) {
             authStatus.textContent = 'Logged in as ' + currentUser;
             logoutBtn.style.display = 'inline-block';
+            // show all games
+            restrictedCards.forEach(card => card.style.display = 'flex');
         } else {
             authStatus.textContent = 'Not logged in';
             logoutBtn.style.display = 'none';
+            // hide restricted games
+            restrictedCards.forEach(card => card.style.display = 'none');
+        }
+    }
+
+    // Load remembered credentials for sign in
+    function loadRemembered() {
+        const savedUser = localStorage.getItem('victories_saved_user');
+        const savedPass = localStorage.getItem('victories_saved_pass');
+        if (savedUser) {
+            signinUsername.value = savedUser;
+            signinRemember.checked = true;
+        }
+        if (savedPass) {
+            signinPassword.value = savedPass;
         }
     }
 
@@ -34,21 +64,37 @@ document.addEventListener('DOMContentLoaded', function () {
     showSigninBtn.addEventListener('click', () => {
         signinForm.style.display = 'block';
         signupForm.style.display = 'none';
+        showSigninBtn.classList.add('active');
+        showSignupBtn.classList.remove('active');
         setMessage('', '');
     });
 
     showSignupBtn.addEventListener('click', () => {
         signinForm.style.display = 'none';
         signupForm.style.display = 'block';
+        showSignupBtn.classList.add('active');
+        showSigninBtn.classList.remove('active');
         setMessage('', '');
     });
 
-    // Sign Up handler
+    // Toggle password visibility
+    function bindShowPassword(checkbox, ...fields) {
+        checkbox.addEventListener('change', () => {
+            fields.forEach(field => {
+                field.type = checkbox.checked ? 'text' : 'password';
+            });
+        });
+    }
+
+    bindShowPassword(signinShowPass, signinPassword);
+    bindShowPassword(signupShowPass, signupPassword, signupConfirm);
+
+    // Sign Up
     signupForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const username = document.getElementById('signup-username').value.trim();
-        const password = document.getElementById('signup-password').value;
-        const confirm = document.getElementById('signup-confirm').value;
+        const username = signupUsername.value.trim();
+        const password = signupPassword.value;
+        const confirm = signupConfirm.value;
 
         if (!username || !password) {
             setMessage('Please enter a username and password.', 'error');
@@ -71,18 +117,26 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.setItem('victories_users', JSON.stringify(users));
         localStorage.setItem('victories_current_user', username);
 
-        setMessage('Account created and signed in!', 'success');
+        // Remember credentials if checked
+        if (signupRemember.checked) {
+            localStorage.setItem('victories_saved_user', username);
+            localStorage.setItem('victories_saved_pass', password);
+        }
+
+        setMessage('Account created and signed in! You now see all games.', 'success');
         updateStatus();
         signupForm.reset();
         signinForm.style.display = 'block';
         signupForm.style.display = 'none';
+        showSigninBtn.classList.add('active');
+        showSignupBtn.classList.remove('active');
     });
 
-    // Sign In handler
+    // Sign In
     signinForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const username = document.getElementById('signin-username').value.trim();
-        const password = document.getElementById('signin-password').value;
+        const username = signinUsername.value.trim();
+        const password = signinPassword.value;
 
         const usersRaw = localStorage.getItem('victories_users');
         const users = usersRaw ? JSON.parse(usersRaw) : {};
@@ -93,18 +147,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         localStorage.setItem('victories_current_user', username);
-        setMessage('Signed in successfully!', 'success');
+
+        if (signinRemember.checked) {
+            localStorage.setItem('victories_saved_user', username);
+            localStorage.setItem('victories_saved_pass', password);
+        } else {
+            localStorage.removeItem('victories_saved_user');
+            localStorage.removeItem('victories_saved_pass');
+        }
+
+        setMessage('Signed in successfully! You now see all games.', 'success');
         updateStatus();
-        signinForm.reset();
     });
 
     // Log out
     logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('victories_current_user');
-        setMessage('Logged out.', 'success');
+        setMessage('Logged out. Some games are now hidden.', 'success');
         updateStatus();
     });
 
-    // Initial status
+    // Initial state
+    loadRemembered();
     updateStatus();
 });
