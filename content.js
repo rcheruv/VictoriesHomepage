@@ -2,6 +2,7 @@
 // Demo-only auth with localStorage: NOT secure for real passwords.
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Buttons / forms / UI
     const showSigninBtn = document.getElementById('show-signin');
     const showSignupBtn = document.getElementById('show-signup');
     const signinForm = document.getElementById('signin-form');
@@ -10,179 +11,224 @@ document.addEventListener('DOMContentLoaded', function () {
     const authStatus = document.getElementById('auth-status');
     const logoutBtn = document.getElementById('logout-btn');
 
+    // Signin inputs
     const signinUsername = document.getElementById('signin-username');
     const signinPassword = document.getElementById('signin-password');
     const signinShowPass = document.getElementById('signin-show-pass');
     const signinRemember = document.getElementById('signin-remember');
 
+    // Signup inputs
     const signupUsername = document.getElementById('signup-username');
     const signupPassword = document.getElementById('signup-password');
     const signupConfirm = document.getElementById('signup-confirm');
     const signupShowPass = document.getElementById('signup-show-pass');
     const signupRemember = document.getElementById('signup-remember');
 
-    const restrictedCards = document.querySelectorAll('.restricted');
+    const signinSubmit = document.getElementById('signin-submit');
+    const signupSubmit = document.getElementById('signup-submit');
 
-    function isLoggedIn() {
-        return !!localStorage.getItem('victories_current_user');
-    }
+    // Helper keys in localStorage
+    const USERS_KEY = 'victories_users';
+    const CURRENT_KEY = 'victories_current_user';
+    const SAVED_CREDS = 'victories_saved_creds'; // for "remember" demo only
 
-    function setMessage(text, type) {
-        authMessage.textContent = text;
-        if (!text) {
-            authMessage.style.color = '';
-            return;
+    // Utility - load users object
+    function loadUsers() {
+        try {
+            const raw = localStorage.getItem(USERS_KEY);
+            return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+            return {};
         }
-        authMessage.style.color = type === 'error' ? '#ffb3b3' : '#c8ffb3';
     }
 
-    function updateStatus() {
-        const currentUser = localStorage.getItem('victories_current_user');
-        if (currentUser) {
-            authStatus.textContent = 'Logged in as ' + currentUser;
-            logoutBtn.style.display = 'inline-block';
+    // Utility - save users object
+    function saveUsers(users) {
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    }
+
+    // Utility - set current user
+    function setCurrentUser(username) {
+        if (username) {
+            localStorage.setItem(CURRENT_KEY, username);
         } else {
-            authStatus.textContent = 'Not logged in';
+            localStorage.removeItem(CURRENT_KEY);
+        }
+        updateAuthUI();
+    }
+
+    // Utility - get current user
+    function getCurrentUser() {
+        return localStorage.getItem(CURRENT_KEY);
+    }
+
+    // Update UI depending on auth state
+    function updateAuthUI() {
+        const user = getCurrentUser();
+        if (user) {
+            authStatus.textContent = `Signed in as: ${user}`;
+            logoutBtn.style.display = 'inline-block';
+            authMessage.textContent = '';
+            // allow restricted links (we handle clicks separately)
+        } else {
+            authStatus.textContent = 'Not signed in';
             logoutBtn.style.display = 'none';
         }
     }
 
-    // Load remembered credentials for sign in
-    function loadRemembered() {
-        const savedUser = localStorage.getItem('victories_saved_user');
-        const savedPass = localStorage.getItem('victories_saved_pass');
-        if (savedUser) {
-            signinUsername.value = savedUser;
-            signinRemember.checked = true;
-        }
-        if (savedPass) {
-            signinPassword.value = savedPass;
-        }
+    // Show message helper
+    function showMessage(msg, isError = true) {
+        authMessage.textContent = msg;
+        authMessage.style.color = isError ? '#ffb3b3' : '#b7ffb3';
     }
 
-    // Toggle forms
-    showSigninBtn.addEventListener('click', () => {
-        signinForm.style.display = 'block';
-        signupForm.style.display = 'none';
+    // Toggle show/hide forms
+    function showSignin() {
         showSigninBtn.classList.add('active');
         showSignupBtn.classList.remove('active');
-        setMessage('', '');
-    });
-
-    showSignupBtn.addEventListener('click', () => {
-        signinForm.style.display = 'none';
-        signupForm.style.display = 'block';
-        showSignupBtn.classList.add('active');
-        showSigninBtn.classList.remove('active');
-        setMessage('', '');
-    });
-
-    // Toggle password visibility
-    function bindShowPassword(checkbox, ...fields) {
-        checkbox.addEventListener('change', () => {
-            fields.forEach(field => {
-                field.type = checkbox.checked ? 'text' : 'password';
-            });
-        });
+        signinForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        authMessage.textContent = '';
     }
 
-    bindShowPassword(signinShowPass, signinPassword);
-    bindShowPassword(signupShowPass, signupPassword, signupConfirm);
+    function showSignup() {
+        showSignupBtn.classList.add('active');
+        showSigninBtn.classList.remove('active');
+        signupForm.style.display = 'block';
+        signinForm.style.display = 'none';
+        authMessage.textContent = '';
+    }
 
-    // Intercept clicks on restricted games
-    restrictedCards.forEach(card => {
-        card.addEventListener('click', (e) => {
-            if (!isLoggedIn()) {
-                e.preventDefault();
-                setMessage('Sign up or sign in first before you access this game.', 'error');
-                // Switch to sign in tab to make it obvious
-                signinForm.style.display = 'block';
-                signupForm.style.display = 'none';
-                showSigninBtn.classList.add('active');
-                showSignupBtn.classList.remove('active');
-            }
-        });
+    // Wire toggle buttons
+    showSigninBtn.addEventListener('click', showSignin);
+    showSignupBtn.addEventListener('click', showSignup);
+
+    // Show password toggles
+    signinShowPass.addEventListener('change', () => {
+        signinPassword.type = signinShowPass.checked ? 'text' : 'password';
+    });
+    signupShowPass.addEventListener('change', () => {
+        signupPassword.type = signupShowPass.checked ? 'text' : 'password';
+        signupConfirm.type = signupShowPass.checked ? 'text' : 'password';
     });
 
-    // Sign Up
-    signupForm.addEventListener('submit', (e) => {
+    // Remember feature (demo): fill sign in fields if saved
+    (function loadSavedCreds() {
+        try {
+            const raw = localStorage.getItem(SAVED_CREDS);
+            if (raw) {
+                const cred = JSON.parse(raw);
+                if (cred && cred.username && cred.password) {
+                    signinUsername.value = cred.username;
+                    signinPassword.value = cred.password;
+                    signinRemember.checked = true;
+                }
+            }
+        } catch (e) {
+            // ignore
+        }
+    })();
+
+    // Signup handler
+    signupForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const username = signupUsername.value.trim();
         const password = signupPassword.value;
         const confirm = signupConfirm.value;
 
         if (!username || !password) {
-            setMessage('Please enter a username and password.', 'error');
+            showMessage('Please enter a username and password.');
             return;
         }
         if (password !== confirm) {
-            setMessage('Passwords do not match.', 'error');
+            showMessage('Passwords do not match.');
             return;
         }
 
-        const usersRaw = localStorage.getItem('victories_users');
-        const users = usersRaw ? JSON.parse(usersRaw) : {};
-
+        const users = loadUsers();
         if (users[username]) {
-            setMessage('Username already exists, choose another.', 'error');
+            showMessage('Username already exists. Choose another.');
             return;
         }
 
-        users[username] = password;
-        localStorage.setItem('victories_users', JSON.stringify(users));
-        localStorage.setItem('victories_current_user', username);
+        // Save user (demo: plaintext)
+        users[username] = {
+            password: password
+        };
+        saveUsers(users);
 
-        // Remember credentials if checked
+        // Auto sign-in after signup
+        setCurrentUser(username);
+
+        // Save credentials if requested (demo)
         if (signupRemember.checked) {
-            localStorage.setItem('victories_saved_user', username);
-            localStorage.setItem('victories_saved_pass', password);
+            localStorage.setItem(SAVED_CREDS, JSON.stringify({ username, password }));
         }
 
-        setMessage('Account created and signed in! You can now open all games.', 'success');
-        updateStatus();
-        signupForm.reset();
-        signinForm.style.display = 'block';
-        signupForm.style.display = 'none';
-        showSigninBtn.classList.add('active');
-        showSignupBtn.classList.remove('active');
+        showMessage('Signup successful — signed in!', false);
+        // switch to signin view to match previous UI if desired:
+        showSignin();
     });
 
-    // Sign In
-    signinForm.addEventListener('submit', (e) => {
+    // Signin handler
+    signinForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const username = signinUsername.value.trim();
         const password = signinPassword.value;
 
-        const usersRaw = localStorage.getItem('victories_users');
-        const users = usersRaw ? JSON.parse(usersRaw) : {};
-
-        if (!users[username] || users[username] !== password) {
-            setMessage('Invalid username or password.', 'error');
+        if (!username || !password) {
+            showMessage('Enter username and password.');
             return;
         }
 
-        localStorage.setItem('victories_current_user', username);
-
-        if (signinRemember.checked) {
-            localStorage.setItem('victories_saved_user', username);
-            localStorage.setItem('victories_saved_pass', password);
-        } else {
-            localStorage.removeItem('victories_saved_user');
-            localStorage.removeItem('victories_saved_pass');
+        const users = loadUsers();
+        const record = users[username];
+        if (!record || record.password !== password) {
+            showMessage('Invalid username or password.');
+            return;
         }
 
-        setMessage('Signed in successfully! You can now open all games.', 'success');
-        updateStatus();
+        setCurrentUser(username);
+
+        // Save credentials if requested (demo)
+        if (signinRemember.checked) {
+            localStorage.setItem(SAVED_CREDS, JSON.stringify({ username, password }));
+        } else {
+            localStorage.removeItem(SAVED_CREDS);
+        }
+
+        showMessage('Signed in successfully!', false);
     });
 
-    // Log out
-    logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('victories_current_user');
-        setMessage('Logged out. Restricted games require sign in again.', 'success');
-        updateStatus();
+    // Logout
+    logoutBtn.addEventListener('click', function () {
+        setCurrentUser(null);
+        showMessage('Logged out.', false);
     });
 
-    // Initial state
-    loadRemembered();
-    updateStatus();
+    // Prevent navigation to restricted games if not signed in
+    function initRestrictedGuards() {
+        const restrictedLinks = document.querySelectorAll('a.restricted');
+        restrictedLinks.forEach(link => {
+            link.addEventListener('click', (ev) => {
+                const user = getCurrentUser();
+                if (!user) {
+                    ev.preventDefault();
+                    showMessage('You must sign in to open restricted games.');
+                    // small visual hint
+                    link.classList.add('blocked');
+                    setTimeout(() => link.classList.remove('blocked'), 800);
+                }
+                // if user is signed in — allow navigation
+            }, false);
+        });
+    }
+
+    // initial setup
+    updateAuthUI();
+    initRestrictedGuards();
+
+    // Safety: if there is already a "current user" in localStorage, keep them signed in
+    // done in updateAuthUI()
+
 });
