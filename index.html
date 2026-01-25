@@ -203,7 +203,7 @@
             <div class="game-title">Made by Victories</div>
         </a>
 
-         <a href="https://victoriesgamecenteral.lovable.app" class="game-card">
+        <a href="https://victoriesgamecenteral.lovable.app" class="game-card">
             <div class="card-header">Victories Game Centeral</div>
             <div class="thumbnail-box">
                 <img src="Game.jpg" alt="Game 6">
@@ -211,9 +211,7 @@
             <div class="game-title">Made by Victories</div>
         </a>
 
-        </a>
-
-         <a href="https://notlogin4victories.lovable.app" class="game-card">
+        <a href="https://notlogin4victories.lovable.app" class="game-card">
             <div class="card-header">Fake username/passwords</div>
             <div class="thumbnail-box">
                 <img src="victorieslogin.jpg" alt="Game 7">
@@ -221,9 +219,7 @@
             <div class="game-title">Made by Victories</div>
         </a>
 
-         </a>
-
-         <a href="https://victories.lovable.app" class="game-card">
+        <a href="https://victories.lovable.app" class="game-card">
             <div class="card-header">Unbanner</div>
             <div class="thumbnail-box">
                 <img src="unbanner.jpg" alt="Game 8">
@@ -232,6 +228,66 @@
         </a>
     </main>
 
+    <!-- Auth Section -->
+    <section id="auth-section" style="width:100%; max-width:400px; margin:40px auto 60px auto; background:rgba(0,0,0,0.4); padding:20px 25px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.35);">
+        <h2 style="text-align:center; margin-top:0; margin-bottom:20px; font-size:26px;">Victories Account</h2>
+
+        <div style="display:flex; justify-content:center; gap:10px; margin-bottom:20px;">
+            <button id="show-signin" type="button" style="flex:1; padding:10px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; background:#FFEB3B; color:#333;">
+                Sign In
+            </button>
+            <button id="show-signup" type="button" style="flex:1; padding:10px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; background:#ffffff; color:#333;">
+                Sign Up
+            </button>
+        </div>
+
+        <div id="auth-message" style="text-align:center; margin-bottom:10px; min-height:20px; font-size:14px;"></div>
+
+        <form id="signin-form" style="display:block;">
+            <label style="display:block; margin-bottom:5px; font-size:14px;">Username</label>
+            <input id="signin-username" type="text" required
+                style="width:100%; padding:8px 10px; margin-bottom:12px; border-radius:6px; border:none; outline:none;">
+
+            <label style="display:block; margin-bottom:5px; font-size:14px;">Password</label>
+            <input id="signin-password" type="password" required
+                style="width:100%; padding:8px 10px; margin-bottom:18px; border-radius:6px; border:none; outline:none;">
+
+            <button type="submit"
+                style="width:100%; padding:10px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; background:#4CAF50; color:white;">
+                Sign In
+            </button>
+        </form>
+
+        <form id="signup-form" style="display:none;">
+            <label style="display:block; margin-bottom:5px; font-size:14px;">New Username</label>
+            <input id="signup-username" type="text" required
+                style="width:100%; padding:8px 10px; margin-bottom:12px; border-radius:6px; border:none; outline:none;">
+
+            <label style="display:block; margin-bottom:5px; font-size:14px;">Password</label>
+            <input id="signup-password" type="password" required
+                style="width:100%; padding:8px 10px; margin-bottom:12px; border-radius:6px; border:none; outline:none;">
+
+            <label style="display:block; margin-bottom:5px; font-size:14px;">Confirm Password</label>
+            <input id="signup-confirm" type="password" required
+                style="width:100%; padding:8px 10px; margin-bottom:18px; border-radius:6px; border:none; outline:none;">
+
+            <button type="submit"
+                style="width:100%; padding:10px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; background:#2196F3; color:white;">
+                Sign Up
+            </button>
+        </form>
+
+        <div id="auth-status" style="text-align:center; margin-top:15px; font-size:14px;"></div>
+        <div style="text-align:center; margin-top:10px;">
+            <button id="logout-btn" type="button"
+                style="display:none; padding:6px 12px; border:none; border-radius:6px; cursor:pointer; background:#f44336; color:white; font-size:13px;">
+                Log Out
+            </button>
+        </div>
+    </section>
+
+    <!-- Link to JS file -->
+    <script src="content.js"></script>
 </body>
 
 </html>
