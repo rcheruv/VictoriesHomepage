@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Victories - Game Hub</title>
     <style>
-        /* Base Styles */
         body {
             margin: 0;
             padding: 0;
@@ -35,7 +34,6 @@
             }
         }
 
-        /* Header / Logo Area */
         header {
             text-align: center;
             padding: 40px 20px;
@@ -45,7 +43,6 @@
             font-size: 80px;
             font-weight: 900;
             color: #FFEB3B;
-            /* Yellow */
             text-transform: uppercase;
             letter-spacing: -2px;
             text-shadow:
@@ -73,7 +70,6 @@
             font-weight: 500;
         }
 
-        /* Game Grid */
         .game-grid {
             display: flex;
             flex-wrap: wrap;
@@ -83,7 +79,6 @@
             padding: 20px;
         }
 
-        /* Game Card Box */
         .game-card {
             background: rgba(235, 235, 235, 0.9);
             border-radius: 20px;
@@ -111,10 +106,6 @@
             align-items: center;
         }
 
-        .card-header i {
-            margin-right: 5px;
-        }
-
         .thumbnail-box {
             background: #ccc;
             width: 100%;
@@ -139,7 +130,117 @@
             margin-top: auto;
         }
 
-        /* Responsive */
+        /* Auth styles */
+        #auth-section {
+            width: 100%;
+            max-width: 400px;
+            margin: 40px auto 60px auto;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        #auth-section h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+
+        .auth-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .auth-toggle button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            background: #ffffff;
+            color: #333;
+        }
+
+        .auth-toggle button.active {
+            background: #FFEB3B;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+        }
+
+        .auth-label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+        }
+
+        #signin-submit {
+            background: #4CAF50;
+        }
+
+        #signup-submit {
+            background: #2196F3;
+        }
+
+        #auth-message {
+            text-align: center;
+            margin-bottom: 10px;
+            min-height: 20px;
+            font-size: 14px;
+        }
+
+        #auth-status {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        #logout-btn {
+            display: none;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #f44336;
+            color: white;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .auth-row-inline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .auth-row-inline input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
         @media (max-width: 600px) {
             .logo-main {
                 font-size: 50px;
@@ -162,8 +263,8 @@
     <div class="container-label">Victories game container</div>
 
     <main class="game-grid">
-
-        <a href="https://shooter1.lovable.app" class="game-card">
+        <!-- Restricted games (hidden unless logged in) -->
+        <a href="https://shooter1.lovable.app" class="game-card restricted" id="game-shooter1">
             <div class="card-header">Shooter1</div>
             <div class="thumbnail-box">
                 <img src="shooter1.jpg" alt="Game 1">
@@ -171,7 +272,7 @@
             <div class="game-title">Made by Victories</div>
         </a>
 
-        <a href="https://victoriestunes.lovable.app" class="game-card">
+        <a href="https://victoriestunes.lovable.app" class="game-card" id="game-tunes">
             <div class="card-header">VictoriesTunes</div>
             <div class="thumbnail-box">
                 <img src="tune.jpg" alt="Game 2">
@@ -179,7 +280,7 @@
             <div class="game-title">Made by Victories</div>
         </a>
 
-        <a href="https://victoriesai.lovable.app" class="game-card">
+        <a href="https://victoriesai.lovable.app" class="game-card restricted" id="game-ai">
             <div class="card-header">NexusAI</div>
             <div class="thumbnail-box">
                 <img src="nexuslogo.jpg" alt="Game 3">
@@ -187,7 +288,7 @@
             <div class="game-title">Made by Victories</div>
         </a>
 
-        <a href="https://victoriesblooket.lovable.app" class="game-card">
+        <a href="https://victoriesblooket.lovable.app" class="game-card" id="game-blooket">
             <div class="card-header">VictoriesBlooket</div>
             <div class="thumbnail-box">
                 <img src="blooket.jpg" alt="Game 4">
@@ -195,7 +296,7 @@
             <div class="game-title">Made by Victories</div>
         </a>
 
-        <a href="https://foodfps.lovable.app" class="game-card">
+        <a href="https://foodfps.lovable.app" class="game-card restricted" id="game-foodfps">
             <div class="card-header">FoodFPS</div>
             <div class="thumbnail-box">
                 <img src="IMG_4175.jpeg" alt="Game 5">
@@ -203,7 +304,7 @@
             <div class="game-title">Made by Victories</div>
         </a>
 
-        <a href="https://victoriesgamecenteral.lovable.app" class="game-card">
+        <a href="https://victoriesgamecenteral.lovable.app" class="game-card" id="game-centeral">
             <div class="card-header">Victories Game Centeral</div>
             <div class="thumbnail-box">
                 <img src="Game.jpg" alt="Game 6">
@@ -211,7 +312,7 @@
             <div class="game-title">Made by Victories</div>
         </a>
 
-        <a href="https://notlogin4victories.lovable.app" class="game-card">
+        <a href="https://notlogin4victories.lovable.app" class="game-card restricted" id="game-login">
             <div class="card-header">Fake username/passwords</div>
             <div class="thumbnail-box">
                 <img src="victorieslogin.jpg" alt="Game 7">
@@ -219,7 +320,7 @@
             <div class="game-title">Made by Victories</div>
         </a>
 
-        <a href="https://victories.lovable.app" class="game-card">
+        <a href="https://victories.lovable.app" class="game-card restricted" id="game-unbanner">
             <div class="card-header">Unbanner</div>
             <div class="thumbnail-box">
                 <img src="unbanner.jpg" alt="Game 8">
@@ -229,64 +330,67 @@
     </main>
 
     <!-- Auth Section -->
-    <section id="auth-section" style="width:100%; max-width:400px; margin:40px auto 60px auto; background:rgba(0,0,0,0.4); padding:20px 25px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.35);">
-        <h2 style="text-align:center; margin-top:0; margin-bottom:20px; font-size:26px;">Victories Account</h2>
+    <section id="auth-section">
+        <h2>Victories Account</h2>
 
-        <div style="display:flex; justify-content:center; gap:10px; margin-bottom:20px;">
-            <button id="show-signin" type="button" style="flex:1; padding:10px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; background:#FFEB3B; color:#333;">
-                Sign In
-            </button>
-            <button id="show-signup" type="button" style="flex:1; padding:10px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; background:#ffffff; color:#333;">
-                Sign Up
-            </button>
+        <div class="auth-toggle">
+            <button id="show-signin" type="button" class="active">Sign In</button>
+            <button id="show-signup" type="button">Sign Up</button>
         </div>
 
-        <div id="auth-message" style="text-align:center; margin-bottom:10px; min-height:20px; font-size:14px;"></div>
+        <div id="auth-message"></div>
 
-        <form id="signin-form" style="display:block;">
-            <label style="display:block; margin-bottom:5px; font-size:14px;">Username</label>
-            <input id="signin-username" type="text" required
-                style="width:100%; padding:8px 10px; margin-bottom:12px; border-radius:6px; border:none; outline:none;">
+        <!-- Sign In Form -->
+        <form id="signin-form">
+            <label class="auth-label">Username</label>
+            <input id="signin-username" type="text" class="auth-input" required>
 
-            <label style="display:block; margin-bottom:5px; font-size:14px;">Password</label>
-            <input id="signin-password" type="password" required
-                style="width:100%; padding:8px 10px; margin-bottom:18px; border-radius:6px; border:none; outline:none;">
+            <label class="auth-label">Password</label>
+            <input id="signin-password" type="password" class="auth-input" required>
 
-            <button type="submit"
-                style="width:100%; padding:10px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; background:#4CAF50; color:white;">
-                Sign In
-            </button>
+            <div class="auth-row-inline">
+                <input type="checkbox" id="signin-show-pass">
+                <label for="signin-show-pass">Show password</label>
+            </div>
+
+            <div class="auth-row-inline">
+                <input type="checkbox" id="signin-remember">
+                <label for="signin-remember">Save password on this device</label>
+            </div>
+
+            <button id="signin-submit" type="submit" class="auth-btn">Sign In</button>
         </form>
 
+        <!-- Sign Up Form -->
         <form id="signup-form" style="display:none;">
-            <label style="display:block; margin-bottom:5px; font-size:14px;">New Username</label>
-            <input id="signup-username" type="text" required
-                style="width:100%; padding:8px 10px; margin-bottom:12px; border-radius:6px; border:none; outline:none;">
+            <label class="auth-label">New Username</label>
+            <input id="signup-username" type="text" class="auth-input" required>
 
-            <label style="display:block; margin-bottom:5px; font-size:14px;">Password</label>
-            <input id="signup-password" type="password" required
-                style="width:100%; padding:8px 10px; margin-bottom:12px; border-radius:6px; border:none; outline:none;">
+            <label class="auth-label">Password</label>
+            <input id="signup-password" type="password" class="auth-input" required>
 
-            <label style="display:block; margin-bottom:5px; font-size:14px;">Confirm Password</label>
-            <input id="signup-confirm" type="password" required
-                style="width:100%; padding:8px 10px; margin-bottom:18px; border-radius:6px; border:none; outline:none;">
+            <label class="auth-label">Confirm Password</label>
+            <input id="signup-confirm" type="password" class="auth-input" required>
 
-            <button type="submit"
-                style="width:100%; padding:10px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; background:#2196F3; color:white;">
-                Sign Up
-            </button>
+            <div class="auth-row-inline">
+                <input type="checkbox" id="signup-show-pass">
+                <label for="signup-show-pass">Show password</label>
+            </div>
+
+            <div class="auth-row-inline">
+                <input type="checkbox" id="signup-remember">
+                <label for="signup-remember">Save password on this device</label>
+            </div>
+
+            <button id="signup-submit" type="submit" class="auth-btn">Sign Up</button>
         </form>
 
-        <div id="auth-status" style="text-align:center; margin-top:15px; font-size:14px;"></div>
-        <div style="text-align:center; margin-top:10px;">
-            <button id="logout-btn" type="button"
-                style="display:none; padding:6px 12px; border:none; border-radius:6px; cursor:pointer; background:#f44336; color:white; font-size:13px;">
-                Log Out
-            </button>
+        <div id="auth-status"></div>
+        <div style="text-align:center;">
+            <button id="logout-btn" type="button">Log Out</button>
         </div>
     </section>
 
-    <!-- Link to JS file -->
     <script src="content.js"></script>
 </body>
 
