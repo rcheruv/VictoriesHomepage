@@ -23,6 +23,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const restrictedCards = document.querySelectorAll('.restricted');
 
+    function isLoggedIn() {
+        return !!localStorage.getItem('victories_current_user');
+    }
+
     function setMessage(text, type) {
         authMessage.textContent = text;
         if (!text) {
@@ -37,13 +41,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (currentUser) {
             authStatus.textContent = 'Logged in as ' + currentUser;
             logoutBtn.style.display = 'inline-block';
-            // show all games
-            restrictedCards.forEach(card => card.style.display = 'flex');
         } else {
             authStatus.textContent = 'Not logged in';
             logoutBtn.style.display = 'none';
-            // hide restricted games
-            restrictedCards.forEach(card => card.style.display = 'none');
         }
     }
 
@@ -89,6 +89,21 @@ document.addEventListener('DOMContentLoaded', function () {
     bindShowPassword(signinShowPass, signinPassword);
     bindShowPassword(signupShowPass, signupPassword, signupConfirm);
 
+    // Intercept clicks on restricted games
+    restrictedCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (!isLoggedIn()) {
+                e.preventDefault();
+                setMessage('Sign up or sign in first before you access this game.', 'error');
+                // Switch to sign in tab to make it obvious
+                signinForm.style.display = 'block';
+                signupForm.style.display = 'none';
+                showSigninBtn.classList.add('active');
+                showSignupBtn.classList.remove('active');
+            }
+        });
+    });
+
     // Sign Up
     signupForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -123,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem('victories_saved_pass', password);
         }
 
-        setMessage('Account created and signed in! You now see all games.', 'success');
+        setMessage('Account created and signed in! You can now open all games.', 'success');
         updateStatus();
         signupForm.reset();
         signinForm.style.display = 'block';
@@ -156,14 +171,14 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.removeItem('victories_saved_pass');
         }
 
-        setMessage('Signed in successfully! You now see all games.', 'success');
+        setMessage('Signed in successfully! You can now open all games.', 'success');
         updateStatus();
     });
 
     // Log out
     logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('victories_current_user');
-        setMessage('Logged out. Some games are now hidden.', 'success');
+        setMessage('Logged out. Restricted games require sign in again.', 'success');
         updateStatus();
     });
 
